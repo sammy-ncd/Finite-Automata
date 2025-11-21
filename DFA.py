@@ -6,8 +6,6 @@ class DFA:
         self.q0 = q0 # Start state
         self.F = F # Set of accept states
 
-        # Transition functions be a dictionary of dictionaries {{0, a} : 1, {0, b}, 2}
-
     def run(self, s):
         q = self.q0 
         while(s != ""):
@@ -21,6 +19,9 @@ m1 = DFA({0, 1},
          1, 
          [1])
 
-print(m1.run("abba"))
-print(m1.run("abb"))
-print(m1.run("abbaa"))
+def main():
+    print(m1.run("abba"))
+    print(m1.run("abb"))
+    print(m1.run("abbaa"))
+
+main()
