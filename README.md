@@ -1,3 +1,3 @@
-Glissy, Shammy, Nyo, um, um, I like big, Mommy!, HiiIiiiI, grrrrrr, um, thammy, 
-um, yestch, hehehe, ehehe, um, uhhm, I want cake, um, haiiiii, um, kuromiii, 
-um, heee, meEoooW, um, tanks, yawn, hehe, penar, *muuuah*, um, glissy was here.
+DFA.py --> Deterministic finite Automaton, run function performs a computation for a string.
+
+NFA.py --> Nondeterministic finite Automaton, run does the same thing. Union, Concatenate, and Star lets you perform operations on NFAs.
