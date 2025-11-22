@@ -6,8 +6,6 @@ class NFA:
         self.q0 = q0 # Start state
         self.F = F # Set of accept states
 
-    # {(state, symbol): {}}
-
     def traverse_epsilons(self, states):
         closure = states
         stack = [state for state in states]
@@ -21,7 +19,6 @@ class NFA:
                         stack.append(move)
         return closure
 
-
     def transition(self, states, symbol):
         outputs = set()
         for state in states:
@@ -30,8 +27,6 @@ class NFA:
             except KeyError:
                 outputs = outputs | set()
         return outputs
-    
-    # E == ""
         
     def run(self, s):
         q = self.traverse_epsilons({self.q0})
@@ -47,24 +42,33 @@ class NFA:
         print(self.q0)
         print(self.F)
 
+    # Union
     def union(n1, n2):
         new_start = -1
         delta = {(new_start, "") : {n1.q0, n2.q0}} | n1.delta | n2.delta
         return NFA(n1.Q | n2.Q | {new_start}, n1.Sigma | n2.Sigma, delta, new_start, n1.F + n2.F)
 
+    # Concatenation
     def concatenate(self, n2):
         delta = {} | self.delta | n2.delta
         for state in self.F:
-            delta[(state, "")] = {n2.q0}
+            if delta.get((state, "")) != None:
+                delta[(state, "")] = delta[(state, "")] | {n2.q0}
+            else:
+                delta[(state, "")] = {n2.q0}
         return NFA(self.Q | n2.Q, self.Sigma | n2.Sigma, delta, self.q0, n2.F)
 
+    # Kleene Star
     def star(self):
         new_start = -1
-        delta = self.delta
+        delta = {} | self.delta
         for state in self.F:
-            delta[(state, "")] = {self.q0}
-        delta[(new_start, "")] = {self.q0}
-        return NFA(self.Q | {new_start}, self.Sigma, delta, new_start, self.F)
+            if delta.get((state, "")) != None:
+                delta[(state, "")] = delta[(state, "")] | {self.q0}
+            else:
+                delta[(state, "")] = {self.q0}
+            delta[(new_start, "")] = {self.q0}
+        return NFA(self.Q | {new_start}, self.Sigma, delta, new_start, self.F + [new_start])
 
 
 n1 = NFA({0, 1}, 
@@ -143,7 +147,7 @@ print("abc: " + str(n6.run("abc"))) # False
 n7 = n6.star()
 
 print("------------ After Star ------------")
-print("abb: " + str(n6.run("abb"))) # True
-print("ab: "+ str(n6.run("ab"))) # True
-print("c: " + str(n6.run("c"))) # True
-print("abc: " + str(n6.run("abc"))) # True
+print("abb: " + str(n7.run("abb"))) # True
+print("ab: "+ str(n7.run("ab"))) # True
+print("c: " + str(n7.run("c"))) # True
+print("abc: " + str(n7.run("abc"))) # True
